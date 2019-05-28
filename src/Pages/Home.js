@@ -22,7 +22,8 @@ const styles = theme => ({
   mainContent: {
     flex: 1,
     padding: '80px 36px 0',
-    background: '#ffffff',
+    //background: '#ffffff',
+    background: '#eaeff1',
   },
   progress: {
     margin: theme.spacing(2),
@@ -35,7 +36,8 @@ class Home extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      username : ''
+      username : '',
+      loading : false
     }
   }
 
@@ -48,6 +50,10 @@ class Home extends React.Component {
       [name]: event.target.value,
       });
     };
+
+    analyse = () => {
+      this.setState({loading : !this.state.loading})
+    }
 
   render() {
 
@@ -93,11 +99,24 @@ class Home extends React.Component {
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                   // onClick={onSubmit}
+                    onClick={() => this.analyse()}
                   >
                     Analyse
                   </Button>
                   </Grid>
+
+                {this.state.loading &&
+                  <Grid style={{marginTop:'5px'}} justify = "center" container spacing={2}>
+                  <Grid  style={{backgroundColor:'transparent'}}item xs = {12} md = {12}>
+                  <img style={{ display: 'block',
+                                marginLeft: 'auto',
+                                marginRight: 'auto'}} 
+                                src="loading.gif" alt="Flowers in Chania"></img>
+                  </Grid>
+                  </Grid>
+                }
+
+
                   </Grid>
                 </main>
               </div>

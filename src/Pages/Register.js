@@ -62,7 +62,7 @@ class SignIn extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      email:"",
+      //email:"",
       username: "",
       password: "",
       confirmPassword : "",
@@ -172,7 +172,7 @@ class SignIn extends React.Component {
                       </FormControl>
           </Grid>
 
-                    <Grid item xs={12} md={12}>
+                    {/*<Grid item xs={12} md={12}>
                       <FormControl margin="normal"  fullWidth>
                       <TextField
                       required
@@ -184,7 +184,7 @@ class SignIn extends React.Component {
                         type="email"
                         />
                       </FormControl>
-                    </Grid>
+                    </Grid>*/}
 
                     <Grid item xs={12} md={6}>
                       <FormControl margin="normal"  fullWidth>
