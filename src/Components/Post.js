@@ -12,6 +12,15 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import Canvas from './Canvas';
+
+import BarChartIcon from '@material-ui/icons/BarChart';
 
 const styles = theme => ({
 
@@ -59,7 +68,8 @@ class RecipeReviewCard extends React.Component {
       analyseAt: '',
       fullText: '',
       sentiment : 0,
-      comments : []
+      comments : [],
+      open: false,
     }
 
     this.state.twitterAccount = this.props.data.twitterAccount
@@ -70,9 +80,23 @@ class RecipeReviewCard extends React.Component {
 
   }
 
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   }
+
+  componentDidMount() {
+
+  };
+
+
 
   render() {
 
@@ -146,12 +170,41 @@ class RecipeReviewCard extends React.Component {
   
   return (
     
+    <>
+ 
+<Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Statistic info"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+          <Canvas/>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
     <Card className={classes.card}>
       
       <CardHeader
         avatar={sentimentGeneral(this.state.sentiment)}
         title={this.state.twitterAccount}
         subheader={this.state.analyseAt}
+        
+        action = {
+
+          <IconButton
+          onClick={this.handleClickOpen}
+        >
+          <BarChartIcon />
+        </IconButton>
+        }
       />
 
       <CardContent>
@@ -182,6 +235,7 @@ class RecipeReviewCard extends React.Component {
         </CardContent>
       </Collapse>
     </Card>
+    </>
   );
  }
 }
