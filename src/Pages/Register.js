@@ -90,11 +90,11 @@ class SignIn extends React.Component {
 
     return (
       <AuthContext>
-        {({ error, user, signUp }) => { // authContext
+        {({ error, user, register }) => { // authContext
 
-          /*if(user) {
+          if(user) {
               return <Redirect to="/" />;
-          }*/
+          }
 
           const { classes } = this.props;
 
@@ -110,20 +110,14 @@ class SignIn extends React.Component {
             let password = this.state.password;
             let confirmPassword = this.state.confirmPassword;
 
-            /*console.log(firstname);
-            console.log(lastname);
-            console.log(email);
-            console.log(username);
-            console.log(password);
-            console.log(confirmPassword);*/
 
-            /*if (firstname !== "" && lastname !== "" && email !== "" 
-            && username !== "" && password !== "" && confirmPassword !== "") {
+            
+            if (username !== "" && password !== "" && confirmPassword !== "") {
 
               //if ( email !== ""  && password !== "" && confirmPassword !== "") {
 
               if(password === confirmPassword){
-                  return signUp(firstname,lastname,username,email, password).then((element) => {
+                  return register(username,password).then((element) => {
                     this.setState({ statusRegister: "Account has been successfully registered" });
                     this.setState({ displayCircularProgress: false });
                   }).catch(err => {
@@ -138,9 +132,7 @@ class SignIn extends React.Component {
             }else{
               this.setState({ errorLocal: "The fields must not be null" });
               this.setState({ displayCircularProgress: false });
-            }*/
-
-
+            }
           }
 
           return (

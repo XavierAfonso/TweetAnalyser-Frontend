@@ -4,6 +4,7 @@ class Canvas extends React.Component {
 
     componentDidMount() {
         var ctx = document.getElementById('canvas').getContext('2d');
+        var tmp = this.props.data
 
         var myBarChart = new window.Chart(ctx, {
            
@@ -14,7 +15,7 @@ class Canvas extends React.Component {
             {
             label: "",
             backgroundColor: ["red", "orange","grey","blue","green"],
-            data: [15,2,2,4,2]
+            data: tmp
         }
       ]
     },

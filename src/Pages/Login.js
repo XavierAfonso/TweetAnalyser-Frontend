@@ -59,7 +59,7 @@ class Login extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      username: "",
+      email: "",
       password: "",
       errorLocal : "",
       displayCircularProgress : false,
@@ -84,7 +84,7 @@ class Login extends React.Component {
 
     return (
       <AuthContext>
-        {({ error, user, signIn }) => { // authContext
+        {({ error, user, login }) => { // authContext
 
 
           if(user===null){
@@ -105,14 +105,14 @@ class Login extends React.Component {
 
             this.setState({ errorLocal: "" });
 
-            let username = this.state.username;
+            let email = this.state.email;
             let password = this.state.password;
 
             //console.log(username);
             //console.log(password);
 
-            if (username !== "" && password !== "") {
-              signIn({ username, password }).catch(() => {
+            if (email !== "" && password !== "") {
+              login({ email, password }).catch(() => {
                 this.setState({ displayCircularProgress: false });
               })
             }
@@ -143,7 +143,7 @@ class Login extends React.Component {
                         id="username"
                         label="Email"
                         value={this.state.email}
-                        onChange={this.handleChange('username')}
+                        onChange={this.handleChange('email')}
                         variant="outlined"
                         type="email"
                         />
@@ -157,7 +157,7 @@ class Login extends React.Component {
                         required
                         id="password"
                         label="Password"
-                        value={this.state.email}
+                        value={this.state.password}
                         onChange={this.handleChange('password')}
                         variant="outlined"
                         type="password"

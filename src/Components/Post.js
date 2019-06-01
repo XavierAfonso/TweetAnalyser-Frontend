@@ -69,6 +69,7 @@ class RecipeReviewCard extends React.Component {
       fullText: '',
       sentiment : 0,
       comments : [],
+      data : [],
       open: false,
     }
 
@@ -77,6 +78,7 @@ class RecipeReviewCard extends React.Component {
     this.state.fullText = this.props.data.fullText
     this.state.sentiment = this.props.data.sentiment
     this.state.comments = this.props.data.comments
+    this.state.data = this.props.data.data
 
   }
 
@@ -164,8 +166,10 @@ class RecipeReviewCard extends React.Component {
   const renderData = this.state.comments.map( (element,key) => 
   <Grid key = {key} item xs={12} md={12} style={{ marginTop:'10px',overflow: 'auto',border:(key %2===0 ? '1 px solid #bcd2e9' : ' 1 px solid #ffffff'),
   backgroundColor: (key %2==0 ? '#eef5fc' : '#eaeff1')}}>
+    {element.author_screen_name}
   <div style={{marginBottom:'10px'}} > {sentimentTweet(element.sentiment)}</div>
-  {element.text}
+  
+  {element.full_text}
   </Grid>)
   
   return (
@@ -181,7 +185,7 @@ class RecipeReviewCard extends React.Component {
           <DialogTitle id="alert-dialog-title">{"Statistic info"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-          <Canvas/>
+          <Canvas data={this.state.data} />
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -229,9 +233,12 @@ class RecipeReviewCard extends React.Component {
 
       <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
         <CardContent>
+        <div style={{height : '200px', overflowY:'auto'}}>
         <Grid style={{backgroundColor:'transparent'}} justify = "center" container spacing={2}>
-          {renderData}
+
+           {renderData} 
           </Grid>
+       </div>
         </CardContent>
       </Collapse>
     </Card>

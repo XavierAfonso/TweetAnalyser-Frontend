@@ -9,6 +9,8 @@ import { AuthContext } from '../Utils/AuthProvider';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 
+import { userService } from '../Utils/user.services';
+
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -36,7 +38,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      username : '',
+      value : '',
       loading : false
     }
   }
@@ -52,7 +54,17 @@ class Home extends React.Component {
     };
 
     analyse = () => {
-      this.setState({loading : !this.state.loading})
+      this.setState({loading : true})
+
+      userService.getAnalyse(this.state.value)
+      .then(res => {
+        this.setState({loading : false})
+        console.log(res)}
+        )
+      .catch(err => {
+        this.setState({loading : false})
+        console.log(err)
+      })
     }
 
   render() {
@@ -81,8 +93,8 @@ class Home extends React.Component {
                         required
                         id="twitterAccount"
                         label="Twitter Account"
-                        value={this.state.username}
-                        onChange={this.handleChange('username')}
+                        value={this.state.value}
+                        onChange={this.handleChange('value')}
                         variant="outlined"
                         type="twitterAccount"
                         />

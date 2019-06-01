@@ -16,15 +16,9 @@ class AuthProvider extends Component {
 
             user:null,
             error:null,
-            signIn:this.signIn,
-            signUp:this.signUp,
-            signOut:this.signOut,
-            getAllUsers:this.getAllUsers,
-            getUser:this.getUser,
-            getFollowers:this.getFollowers,
-            postFollower:this.postFollower,
-            getBooksUser:this.getBooksUser,
-            test : this.test
+            login:this.login,
+            register:this.register,
+            logout:this.logout,
           }
     }
 
@@ -43,11 +37,11 @@ class AuthProvider extends Component {
             const username = window.localStorage.getItem('username');
             this.setState({user: token}); 
 
-              if(true){ //token
+              if(token){ //token
 
-                if(true){ //username
+                if(username){ //username
 
-                    this.setState({user: "tmp"}); 
+                    this.setState({user: username}); 
                 
                     /*userService.getMe().then(val => {
 
@@ -72,6 +66,9 @@ class AuthProvider extends Component {
         if(error.response.status===400){
             this.setState({error: '400 The email already exist'});
         }
+        else if(error.response.status===404){
+            this.setState({error: 'The email don\'t exist'});
+        }
         else if(error.response.status===500){
             this.setState({error: '500 Server error'});
         }
@@ -83,41 +80,44 @@ class AuthProvider extends Component {
         }
     }
 
-    signIn = ({username,password}) =>{
+    login = ({email,password}) =>{
         
         this.setState({error : ""});
 
-        return userService.postLogin(username,password).then(response => {
+        return userService.getLogin(email,password).then(response => {
 
             const {token} = response.data;
+
             window.localStorage.setItem('token',token);
-            window.localStorage.setItem('username',username);
-
-            this.setState({user: username});
-
+            window.localStorage.setItem('username',email);
+            this.setState({user: email});
 
         }).catch(error => {
-
-            this.getError(error);
-            throw error;
+            console.log(error)
+             this.getError(error);
+             throw error;
         });
     }
 
-    signUp = (firstname,lastname,realUsername,username, password) =>{
+    register = (email,password) =>{
 
        this.setState({error : ""});
 
-       return userService.postRegister(firstname,lastname,realUsername,username, password).then(response => {
-            
+       return userService.getRegister(email,password).then(response => {
+        const {token} = response.data;
+        window.localStorage.setItem('token',token);
+        window.localStorage.setItem('username',email);
+        this.setState({user: email});
         }).catch((error) => {
             
-            this.getError(error);
-            throw error;
+            console.log(error)
+            //this.getError(error);
+            //throw error;
            
         });
     }
 
-    signOut = () => {
+    logout = () => {
         window.localStorage.removeItem('token');
         window.localStorage.removeItem('username');
         this.setState({user : null})

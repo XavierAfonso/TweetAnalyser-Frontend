@@ -7,7 +7,11 @@ import Grid from '@material-ui/core/Grid';
 import { AuthContext } from '../Utils/AuthProvider';
 import Post from '../Components/Post'
 
-let data = [ 
+import { userService } from '../Utils/user.services';
+
+let data = []
+
+/*let data = [ 
   {
   twitterAccount : '@ROLEX',
   analyseAt: '28/05/2019',
@@ -44,7 +48,7 @@ let data = [
 
   ]
 },
-]
+]*/
 
 const styles = theme => ({
   root: {
@@ -73,14 +77,86 @@ class Home extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+
+      newData : [],
+      tweets : [],
+      tweetsResponses : []
     }
   }
 
-  componentDidMount() {};
+  componentDidMount() {
+
+    userService.getTweets().then(res => {
+      this.setState({tweets:res.data})
+
+      console.log(res.data)
+      userService.getTweetsResponses().then(res2 => {
+        
+        //console.log(res)
+        this.setState({tweetsResponses:res2.data.flatMap(x => x)})
+
+
+        //let tmpData = []
+
+        let tmptweets = []
+
+        res.data.forEach(function(element) {
+          tmptweets.push({
+            tweet_id : element.tweet_id,
+            twitterAccount:element.author_screen_name,
+            analyseAt: element.analyzed_at,
+            fullText: element.full_text,
+            sentiment : element.avg_sentiment,
+            comments: [],
+            data: [0,0,0,0,0]
+          })
+        });
+
+        res2.data.forEach(function(element) {
+
+          //console.log(element)
+          //let tmpComment = {element
+         let found = tmptweets.find(a => a.tweet_id == element.fk_tweet);
+         if(found){
+          found.comments.push(element)
+          found.data[element.sentiment] = found.data[element.sentiment] + 1
+         }
+          //console.log(found)
+
+          //
+
+        });
+
+
+
+
+
+        console.log(tmptweets)
+        this.setState({newData :tmptweets })
+
+
+
+
+
+
+
+
+        //console.log(this.state.tweets)
+        //console.log(this.state.tweetsResponses)
+
+
+      }).catch(err => console.log(err))
+
+      
+
+    }).catch(err => console.log(err))
+
+
+  };
 
   render() {
 
-    const renderData = data.map( (element,key) => {
+    const renderData = this.state.newData.map( (element,key) => {
       return(
       <Post key={key} data = {element} />
       )

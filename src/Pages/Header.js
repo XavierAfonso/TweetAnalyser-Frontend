@@ -91,7 +91,7 @@ class Header extends React.Component {
 
       <AuthContext>
 
-        {({signOut, test }) => { // authContext
+        {({logout, test }) => { // authContext
 
 
           const { anchorEl, mobileMoreAnchorEl } = this.state;
@@ -110,7 +110,7 @@ class Header extends React.Component {
 
               <MenuItem onClick={() => this.redirectToTarget("/")}>Home</MenuItem>
               <MenuItem onClick={() => this.redirectToTarget("/analyse")}>Analyse</MenuItem>
-              <MenuItem onClick={signOut}>Logout</MenuItem>
+              <MenuItem onClick={logout}>Logout</MenuItem>
             </Menu>
           );
 
