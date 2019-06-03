@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { userService } from '../Utils/user.services';
 
 const { 
@@ -31,32 +30,15 @@ class AuthProvider extends Component {
 
     componentWillMount () {
 
-       // if(this.state.user === null){
-
             const token = window.localStorage.getItem('token');
             const username = window.localStorage.getItem('username');
             this.setState({user: token}); 
 
-              if(token){ //token
+              if(token){ 
 
-                if(username){ //username
+                if(username){ 
 
                     this.setState({user: username}); 
-                
-                    /*userService.getMe().then(val => {
-
-                        // console.log(val);
-
-                        if(val.data.email===username){
-                            this.setState({user: username}); 
-                        }
-                        else{
-                            this.removeLocalStorage();
-                        }
-
-                    }).catch(err => {
-                        this.removeLocalStorage();
-                    });*/
                 }
             }
     }
@@ -110,10 +92,7 @@ class AuthProvider extends Component {
         this.setState({user: email});
         }).catch((error) => {
             
-            console.log(error)
-            //this.getError(error);
-            //throw error;
-           
+            console.log(error)          
         });
     }
 

@@ -100,16 +100,12 @@ class Login extends React.Component {
           const onSubmit = (event) => {
             event.preventDefault();
 
-            //this.state.displayCircularProgress 
             this.setState({ displayCircularProgress: true });
 
             this.setState({ errorLocal: "" });
 
             let email = this.state.email;
             let password = this.state.password;
-
-            //console.log(username);
-            //console.log(password);
 
             if (email !== "" && password !== "") {
               login({ email, password }).catch(() => {

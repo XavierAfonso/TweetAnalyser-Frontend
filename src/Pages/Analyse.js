@@ -6,49 +6,9 @@ import Header from './Header';
 import Grid from '@material-ui/core/Grid';
 import { AuthContext } from '../Utils/AuthProvider';
 import Post from '../Components/Post'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { userService } from '../Utils/user.services';
-
-let data = []
-
-/*let data = [ 
-  {
-  twitterAccount : '@ROLEX',
-  analyseAt: '28/05/2019',
-  fullText: 'Skill, patience and endurance. The clay courts at @rolandgarros test the mettle of the toughest champions. This year marks the beginning of our relationship with the enthralling Grand Slam® tournament. #RolandGarros #RG19 #Perpetual',
-  sentiment : 4,
-
-  comments : [
-    {
-      text : 'Only the best ware',
-      sentiment: 4
-    },
-    {
-      text : 'Skill, patience and endurance That’s what us punters have to have if we want to buy one of your SS sport watches.',
-      sentiment: 3
-    }
-
-  ]
-},
-{
-  twitterAccount : '@CocaCola',
-  analyseAt: '28/05/2019',
-  fullText: 'We were just as excited as you, and apologize for the glitch. We’re doing our best to make New Coke available. Stay tuned.',
-  sentiment : 1,
-
-  comments : [
-    {
-      text : 'I ordered, PayPal was charged but I got no confirmation or indication on the actual site that my order was successful',
-      sentiment: 1
-    },
-    {
-      text : 'We are working on a solution as we tweet. Sorry for the delay, please send us a DM if you still havent received your email confirmation of your order',
-      sentiment: 0
-    }
-
-  ]
-},
-]*/
 
 const styles = theme => ({
   root: {
@@ -80,79 +40,68 @@ class Home extends React.Component {
 
       newData : [],
       tweets : [],
-      tweetsResponses : []
+      tweetsResponses : [],
+      displayCircularProgress : true,
     }
   }
 
   componentDidMount() {
 
+    let newDataold = this.state.newData
+    var promises = [];
+
     userService.getTweets().then(res => {
-      this.setState({tweets:res.data})
 
-      console.log(res.data)
-      userService.getTweetsResponses().then(res2 => {
-        
-        //console.log(res)
-        this.setState({tweetsResponses:res2.data.flatMap(x => x)})
+       res.data.forEach(element => {
+         
 
+        promises.push(
 
-        //let tmpData = []
+        userService.getTweetsResponses(element.id).then(res2 => {
 
-        let tmptweets = []
-
-        res.data.forEach(function(element) {
-          tmptweets.push({
+          var tmp = {
+            id : element.id,
             tweet_id : element.tweet_id,
             twitterAccount:element.author_screen_name,
-            analyseAt: element.analyzed_at,
+            analyseAt: new Date(element.analyzed_at).toDateString(),
             fullText: element.full_text,
             sentiment : element.avg_sentiment,
-            comments: [],
+            comments: res2.data,
             data: [0,0,0,0,0]
+          }
+
+          tmp.comments.forEach(element2 => {
+            tmp.data[element2.sentiment] = tmp.data[element2.sentiment]+ 1
           })
-        });
 
-        res2.data.forEach(function(element) {
-
-          //console.log(element)
-          //let tmpComment = {element
-         let found = tmptweets.find(a => a.tweet_id == element.fk_tweet);
-         if(found){
-          found.comments.push(element)
-          found.data[element.sentiment] = found.data[element.sentiment] + 1
-         }
-          //console.log(found)
-
-          //
-
-        });
-
-
-
-
-
-        console.log(tmptweets)
-        this.setState({newData :tmptweets })
-
-
-
-
-
-
-
-
-        //console.log(this.state.tweets)
-        //console.log(this.state.tweetsResponses)
-
-
-      }).catch(err => console.log(err))
-
+          let maxValue = Math.max.apply(Math,tmp.data)
+          tmp.sentiment = tmp.data.indexOf(maxValue)
+          newDataold.push(tmp)
       
+        })
 
-    }).catch(err => console.log(err))
+        )
 
+    })
 
-  };
+    Promise.all(promises).then(res => {
+    
+
+      newDataold = newDataold.sort((a,b) => {
+        if(a.id < b.id)
+         return 1
+         else
+         return -1
+      })
+
+      console.log(newDataold)
+      this.setState({ displayCircularProgress: false });
+
+    
+      this.setState({newData :newDataold })
+    })
+  })
+}
 
   render() {
 
@@ -180,6 +129,12 @@ class Home extends React.Component {
                 <main className={classes.mainContent}>
 
                   <Grid style={{marginTop:'1px',backgroundColor:'transparent'}} justify = "center" container spacing={2}>
+
+                  {this.state.displayCircularProgress === true &&
+                  <Grid container justify="center" alignItems="center">
+                  <CircularProgress className={classes.progress} />
+                  </Grid>
+                  }
 
                   <Grid item xs={12} md={7}>
                   

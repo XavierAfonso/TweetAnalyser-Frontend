@@ -8,6 +8,9 @@ import Grid from '@material-ui/core/Grid';
 import { AuthContext } from '../Utils/AuthProvider';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 import { userService } from '../Utils/user.services';
 
@@ -39,7 +42,9 @@ class Home extends React.Component {
     super(props)
     this.state = {
       value : '',
-      loading : false
+      loading : false,
+      error : '',
+      mode:1,
     }
   }
 
@@ -56,7 +61,7 @@ class Home extends React.Component {
     analyse = () => {
       this.setState({loading : true})
 
-      userService.getAnalyse(this.state.value)
+      userService.getAnalyse(this.state.value,this.state.mode)
       .then(res => {
         this.setState({loading : false})
         console.log(res)}
@@ -64,8 +69,14 @@ class Home extends React.Component {
       .catch(err => {
         this.setState({loading : false})
         console.log(err)
+        this.setState({error : "err"})
       })
     }
+
+    handleChangeMode = event => {
+      this.setState({ [event.target.name]: event.target.value });
+    };
+  
 
   render() {
 
@@ -104,17 +115,38 @@ class Home extends React.Component {
 
                   <Grid container  direction="row-reverse" spacing={1}>
                   <Grid  item xs = {12} md = {2}>
+                  <FormControl  fullWidth>
                   <Button
-                    style={{ background: '#1da1f2' }}
+                    style={{ marginTop:'10px', background: '#1da1f2' }}
                     type="submit"
                     fullWidth
                     variant="contained"
                     color="primary"
-                    className={classes.submit}
+                    //className={classes.submit}
                     onClick={() => this.analyse()}
                   >
                     Analyse
                   </Button>
+                  </FormControl>
+                  </Grid>
+                  <Grid  item xs = {12} md = {2}>
+                  <FormControl  fullWidth>
+                  <InputLabel htmlFor="age-helper">Mode</InputLabel>
+                  <Select
+                      value={this.state.mode}
+                      onChange={this.handleChangeMode}
+                      inputProps={{
+                      name: 'mode',
+                      id: 'mode',
+                    }}
+                  >
+
+            <MenuItem value={0}>Low</MenuItem>
+            <MenuItem value={1}>Normal</MenuItem>
+            <MenuItem value={2}>High</MenuItem>
+            <MenuItem value={3}>Very High</MenuItem>
+          </Select>
+        </FormControl>
                   </Grid>
 
                 {this.state.loading &&
@@ -128,6 +160,7 @@ class Home extends React.Component {
                   </Grid>
                 }
 
+                  {this.state.error}
 
                   </Grid>
                 </main>

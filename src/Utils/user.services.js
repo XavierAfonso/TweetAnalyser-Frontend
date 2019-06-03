@@ -19,7 +19,7 @@ function getHeader() {
 
     let headers = {
         //'Content-Type': 'application/json',
-        'Authorization': `${token}`,
+        'Authorization': `Bearer ${token}`,
     }
 
     return { headers };
@@ -33,27 +33,27 @@ function getRegister(email, password) {
     return axios.get(`${baseUrl}/user/register?email=${email}&password=${password}`);
 }
 
-function getAnalyse(screenName) {
-    return axios.get(`${baseUrl}/tweet?tweetId=${screenName}`,getHeader());
+function getAnalyse(screenName,mode) {
+    return axios.get(`${baseUrl}/tweet?screenName=${screenName}&mode=${mode}`,getHeader());
 }
 
 function getTweets() {
     return axios.get(`${baseUrl}/tweets`,getHeader());
 }
 
-function getTweetsResponses() {
-    return axios.get(`${baseUrl}/tweetsResponses`,getHeader());
+function getTweetsResponses(tweetId) {
+    return axios.get(`${baseUrl}/tweetResponses?id=${tweetId}`,getHeader());
 }
 
-/*function getMe() {
-    return axios.get(`/users/me`, getHeader());
-}*/
+function getDeleteTweet(tweetId) {
+    return axios.get(`${baseUrl}/tweet/delete?id=${tweetId}`,getHeader());
+}
 
 export const userService = {
-    //getMe,
     getLogin,
     getRegister,
     getAnalyse,
     getTweets,
-    getTweetsResponses
+    getTweetsResponses,
+    getDeleteTweet
 };

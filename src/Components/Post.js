@@ -19,8 +19,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Canvas from './Canvas';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import BarChartIcon from '@material-ui/icons/BarChart';
+import { userService } from '../Utils/user.services';
 
 const styles = theme => ({
 
@@ -71,6 +73,9 @@ class RecipeReviewCard extends React.Component {
       comments : [],
       data : [],
       open: false,
+      tweet_id : '',
+      visible:true,
+      id : ''
     }
 
     this.state.twitterAccount = this.props.data.twitterAccount
@@ -79,6 +84,8 @@ class RecipeReviewCard extends React.Component {
     this.state.sentiment = this.props.data.sentiment
     this.state.comments = this.props.data.comments
     this.state.data = this.props.data.data
+    this.state.tweet_id = this.props.data.tweet_id
+    this.state.id = this.props.data.id
 
   }
 
@@ -94,10 +101,23 @@ class RecipeReviewCard extends React.Component {
     this.setState(state => ({ expanded: !state.expanded }));
   }
 
+  deletePost = () => {
+
+    // eslint-disable-next-line no-restricted-globals
+    let response = confirm("Voulez-vous supprimer cette analyse ?");
+
+    if(response){
+
+    userService.getDeleteTweet(this.state.id).then(res => {
+      //console.log(res)
+      this.setState({visible : false})
+    }).catch(err => console.log(err))
+  }
+
+  }
+
   componentDidMount() {
-
   };
-
 
 
   render() {
@@ -166,16 +186,22 @@ class RecipeReviewCard extends React.Component {
   const renderData = this.state.comments.map( (element,key) => 
   <Grid key = {key} item xs={12} md={12} style={{ marginTop:'10px',overflow: 'auto',border:(key %2===0 ? '1 px solid #bcd2e9' : ' 1 px solid #ffffff'),
   backgroundColor: (key %2==0 ? '#eef5fc' : '#eaeff1')}}>
-    {element.author_screen_name}
-  <div style={{marginBottom:'10px'}} > {sentimentTweet(element.sentiment)}</div>
-  
+    <div style={{ display: 'inline-flex'}}>
+    <div style={{marginBottom:'10px'}} > {sentimentTweet(element.sentiment)}</div>
+    <div style={{marginLeft:'5px'}}>{element.author_screen_name}</div>
+  </div>
+  <div>
   {element.full_text}
+  </div>
   </Grid>)
   
   return (
     
-    <>
+    <div >
+
+{this.state.visible &&
  
+ <>
 <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -194,7 +220,7 @@ class RecipeReviewCard extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
-    <Card className={classes.card}>
+    <Card  className={classes.card}>
       
       <CardHeader
         avatar={sentimentGeneral(this.state.sentiment)}
@@ -202,13 +228,20 @@ class RecipeReviewCard extends React.Component {
         subheader={this.state.analyseAt}
         
         action = {
-
+            <>
+            <IconButton
+              onClick={() => this.deletePost()}
+            >
+              <DeleteIcon />
+            </IconButton>
           <IconButton
           onClick={this.handleClickOpen}
         >
           <BarChartIcon />
         </IconButton>
+        </>
         }
+        
       />
 
       <CardContent>
@@ -243,6 +276,8 @@ class RecipeReviewCard extends React.Component {
       </Collapse>
     </Card>
     </>
+}
+    </div>
   );
  }
 }

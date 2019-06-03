@@ -33,9 +33,7 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,
-    //backgroundColor : 'red',
-    
+    padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`,   
   },
   avatar: {
     margin: theme.spacing(2),
@@ -62,7 +60,6 @@ class SignIn extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      //email:"",
       username: "",
       password: "",
       confirmPassword : "",
@@ -114,8 +111,6 @@ class SignIn extends React.Component {
             
             if (username !== "" && password !== "" && confirmPassword !== "") {
 
-              //if ( email !== ""  && password !== "" && confirmPassword !== "") {
-
               if(password === confirmPassword){
                   return register(username,password).then((element) => {
                     this.setState({ statusRegister: "Account has been successfully registered" });
@@ -163,20 +158,6 @@ class SignIn extends React.Component {
                         />
                       </FormControl>
           </Grid>
-
-                    {/*<Grid item xs={12} md={12}>
-                      <FormControl margin="normal"  fullWidth>
-                      <TextField
-                      required
-                        id="email"
-                        label="Email"
-                        value={this.state.email}
-                        onChange={this.handleChange('email')}
-                        variant="outlined"
-                        type="email"
-                        />
-                      </FormControl>
-                    </Grid>*/}
 
                     <Grid item xs={12} md={6}>
                       <FormControl margin="normal"  fullWidth>
