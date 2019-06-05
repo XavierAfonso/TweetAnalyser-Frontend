@@ -63,7 +63,7 @@ class SignIn extends React.Component {
       username: "",
       password: "",
       confirmPassword : "",
-      statusRegister: null,
+      //statusRegister: null,
       errorLocal : "",
       displayCircularProgress : false,
     }
@@ -87,7 +87,7 @@ class SignIn extends React.Component {
 
     return (
       <AuthContext>
-        {({ error, user, register }) => { // authContext
+        {({ error, user, register, statusRegister }) => { // authContext
 
           if(user) {
               return <Redirect to="/" />;
@@ -99,7 +99,7 @@ class SignIn extends React.Component {
             event.preventDefault();
 
             this.setState({ displayCircularProgress: true });
-            this.setState({ statusRegister: "" });
+            //this.setState({ statusRegister: "" });
             this.setState({ errorLocal: "" });
             let email = this.state.email;
 
@@ -113,7 +113,7 @@ class SignIn extends React.Component {
 
               if(password === confirmPassword){
                   return register(username,password).then((element) => {
-                    this.setState({ statusRegister: "Account has been successfully registered" });
+                  
                     this.setState({ displayCircularProgress: false });
                   }).catch(err => {
                     this.setState({ displayCircularProgress: false });
@@ -212,7 +212,7 @@ class SignIn extends React.Component {
                   <a className={classes.a} href="/login">You already have an account ?</a>
                   <p style={{ color: 'red' }}>{error}</p>
                   <p style={{ color: 'red' }}>{this.state.errorLocal}</p>
-                  <p style={{ color: 'green' }}>{this.state.statusRegister}</p>
+                  <p style={{ color: 'green' }}>{statusRegister}</p>
                 </form>
               </Paper>
             </main>
