@@ -18,6 +18,7 @@ class AuthProvider extends Component {
             login:this.login,
             register:this.register,
             logout:this.logout,
+            statusRegister:this.statusRegister
           }
     }
 
@@ -90,8 +91,12 @@ class AuthProvider extends Component {
         window.localStorage.setItem('token',token);
         window.localStorage.setItem('username',email);
         this.setState({user: email});
+
+        
+        this.setState({ statusRegister: "Account has been successfully registered" });
         }).catch((error) => {
             
+            this.setState({error : 'The account already exists'})
             console.log(error)          
         });
     }

@@ -65,17 +65,33 @@ class Home extends React.Component {
             twitterAccount:element.author_screen_name,
             analyseAt: new Date(element.analyzed_at).toDateString(),
             fullText: element.full_text,
-            sentiment : element.avg_sentiment,
+            sentiment : Math.floor(element.avg_sentiment),
             comments: res2.data,
             data: [0,0,0,0,0]
           }
 
+        
+          let sumSentiment = 0
+          let nbReponses = 0
+
           tmp.comments.forEach(element2 => {
+            sumSentiment += element2.sentiment
+            nbReponses += 1
             tmp.data[element2.sentiment] = tmp.data[element2.sentiment]+ 1
           })
 
-          let maxValue = Math.max.apply(Math,tmp.data)
-          tmp.sentiment = tmp.data.indexOf(maxValue)
+          //let maxValue = Math.max.apply(Math,tmp.data)
+          //tmp.sentiment = tmp.data.indexOf(maxValue)
+          let r = Math.ceil(sumSentiment/nbReponses)
+          const maxValue = 4
+
+          if(r > maxValue){
+            r = maxValue
+          }
+          else if (r < 0){
+            r = 0
+          }
+          tmp.sentiment = r
           newDataold.push(tmp)
       
         })
@@ -100,6 +116,8 @@ class Home extends React.Component {
     
       this.setState({newData :newDataold })
     })
+  }).catch(err => {
+    this.setState({ displayCircularProgress: false });
   })
 }
 

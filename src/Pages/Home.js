@@ -60,16 +60,19 @@ class Home extends React.Component {
 
     analyse = () => {
       this.setState({loading : true})
+      this.setState({disabled : true})
 
       userService.getAnalyse(this.state.value,this.state.mode)
       .then(res => {
         this.setState({loading : false})
+        this.setState({disabled : false})
         console.log(res)}
         )
       .catch(err => {
         this.setState({loading : false})
+        this.setState({disabled : false})
         console.log(err)
-        this.setState({error : "err"})
+        this.setState({error : "There was an error during the analysis"})
       })
     }
 
@@ -117,6 +120,7 @@ class Home extends React.Component {
                   <Grid  item xs = {12} md = {2}>
                   <FormControl  fullWidth>
                   <Button
+                    disabled = {this.state.disabled}
                     style={{ marginTop:'10px', background: '#1da1f2' }}
                     type="submit"
                     fullWidth
