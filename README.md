@@ -1,8 +1,41 @@
+<div style="text-align: justify">  
+
+> Authors       : Dejvid Muaremi, Mentor Reka, Xavier Vaz Afonso    
+> Professor     : Nastaran Fatemi   
+> Assistants    : Maxime Lovino , Miguel Santamaria   
+> Date          : 05.05.2019  
+
+# Tweet Analyser client
+
+__The server can be found [here](https://github.com/XavierAfonso/TweetAnalyser).__
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+
+This web client allows you to identify the feelings that can be found in the replies of a tweet.
+Once the user has authenticated himself to the server, he will be able to enter the twitter ID of one or more users for which he want to see the reactions to the last tweets they published.
+
+The results are displayed in the analysis page as a post with a coloured dot that indicates the general feeling.
+
+The colors goes as the following :
+- __Red__ The reactions are really bad.
+- __Orange__ The reactions ar bad.
+- __Grey__ The reactions are neutral.
+- __Blue__ The reactions are good.
+- __Green__ The reactions are really good.
+
+![View of the analysis page](./img/TweetAnalyser.PNG "View of the analysis page")
+
+It is also possible to look at the details of it on mouse over, the exact number of the pile will be shown.
+
+![Detailed analysis](./img/pres-cli.PNG "Detailed analysis")
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm install`
+To install the npm packages, this must be done at least once when you pull the project.
 
 ### `npm start`
 
