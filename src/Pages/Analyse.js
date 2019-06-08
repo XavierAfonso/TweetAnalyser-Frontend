@@ -54,55 +54,47 @@ class Home extends React.Component {
 
        res.data.forEach(element => {
          
-
         promises.push(
 
         userService.getTweetsResponses(element.id).then(res2 => {
 
-          var tmp = {
+          var newPost = {
             id : element.id,
             tweet_id : element.tweet_id,
             twitterAccount:element.author_screen_name,
             analyseAt: new Date(element.analyzed_at).toDateString(),
             fullText: element.full_text,
-            sentiment : Math.floor(element.avg_sentiment),
+            sentiment : Math.round(element.avg_sentiment),
             comments: res2.data,
             data: [0,0,0,0,0]
           }
-
         
           let sumSentiment = 0
           let nbReponses = 0
 
-          tmp.comments.forEach(element2 => {
+          newPost.comments.forEach(element2 => {
             sumSentiment += element2.sentiment
             nbReponses += 1
-            tmp.data[element2.sentiment] = tmp.data[element2.sentiment]+ 1
+            newPost.data[element2.sentiment] = newPost.data[element2.sentiment]+ 1
           })
 
-          //let maxValue = Math.max.apply(Math,tmp.data)
-          //tmp.sentiment = tmp.data.indexOf(maxValue)
-          let r = Math.ceil(sumSentiment/nbReponses)
+          let res = Math.ceil(sumSentiment/nbReponses)
           const maxValue = 4
 
-          if(r > maxValue){
-            r = maxValue
+          if(res > maxValue){
+            res = maxValue
           }
-          else if (r < 0){
-            r = 0
+          else if (res < 0){
+            res = 0
           }
-          tmp.sentiment = r
-          newDataold.push(tmp)
-      
+          newPost.sentiment = res
+          newDataold.push(newPost)
         })
-
         )
-
     })
 
     Promise.all(promises).then(res => {
     
-
       newDataold = newDataold.sort((a,b) => {
         if(a.id < b.id)
          return 1
@@ -110,10 +102,7 @@ class Home extends React.Component {
          return -1
       })
 
-      console.log(newDataold)
       this.setState({ displayCircularProgress: false });
-
-    
       this.setState({newData :newDataold })
     })
   }).catch(err => {
@@ -129,10 +118,9 @@ class Home extends React.Component {
       )
     })
 
-    console.log()
     return (
       <AuthContext>
-        {({}) => {
+        {() => {
 
           const { classes } = this.props;
 

@@ -91,7 +91,7 @@ class Header extends React.Component {
 
       <AuthContext>
 
-        {({logout, test }) => { // authContext
+        {({logout }) => { // authContext
 
 
           const { anchorEl, mobileMoreAnchorEl } = this.state;

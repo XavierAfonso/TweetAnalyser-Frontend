@@ -66,12 +66,12 @@ class Home extends React.Component {
       .then(res => {
         this.setState({loading : false})
         this.setState({disabled : false})
-        console.log(res)}
-        )
+        console.log(res)
+      })
       .catch(err => {
         this.setState({loading : false})
         this.setState({disabled : false})
-        console.log(err)
+        //console.log(err)
         this.setState({error : "There was an error during the analysis"})
       })
     }
@@ -164,9 +164,8 @@ class Home extends React.Component {
                   </Grid>
                 }
 
-                  {this.state.error}
-
                   </Grid>
+                  <Grid> <p style={{color:'red'}}>{this.state.error}</p></Grid>
                 </main>
               </div>
             </div>
